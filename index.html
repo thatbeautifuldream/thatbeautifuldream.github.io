@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="antialiased">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,6 +10,9 @@
     />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+      html {
+        color-scheme: light dark;
+      }
       body {
         font-family: "Roboto Mono", monospace;
       }
@@ -27,8 +30,8 @@
       }
     </style>
   </head>
-  <body class="min-h-screen bg-white p-12">
-    <div id="terminal" class="text-base leading-tight"></div>
+  <body class="min-h-dvh bg-white dark:bg-neutral-950 p-6 md:p-12">
+    <div id="terminal" class="isolate text-base"></div>
     <script>
       const typingSpeeds = {
         fast: 15,
@@ -87,17 +90,17 @@
 
         if (isCommand) {
           const prompt = document.createElement("span");
-          prompt.className = "text-neutral-600";
+          prompt.className = "text-neutral-500 dark:text-neutral-400";
           prompt.textContent = "$ ";
           line.appendChild(prompt);
 
           const commandText = document.createElement("span");
-          commandText.className = "text-neutral-800";
+          commandText.className = "text-neutral-900 dark:text-neutral-50";
           line.appendChild(commandText);
           return { line, textElement: commandText };
         } else {
           const output = document.createElement("span");
-          output.className = "text-neutral-500";
+          output.className = "text-neutral-600 dark:text-neutral-400";
           line.appendChild(output);
           return { line, textElement: output };
         }
@@ -105,7 +108,7 @@
 
       function addCursor(line) {
         const cursor = document.createElement("span");
-        cursor.className = "text-neutral-800 cursor-blink";
+          cursor.className = "text-neutral-900 dark:text-neutral-50 cursor-blink";
         cursor.textContent = "|";
         cursor.id = "active-cursor";
         line.appendChild(cursor);
