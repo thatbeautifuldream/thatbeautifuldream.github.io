@@ -1,196 +1,226 @@
 <!doctype html>
 <html lang="en" class="antialiased">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Redirecting...</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      html {
-        color-scheme: light dark;
-      }
-      body {
-        font-family: "Roboto Mono", monospace;
-      }
-      .cursor-blink {
-        animation: blink 1s step-end infinite;
-      }
-      @keyframes blink {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0;
-        }
-      }
-    </style>
-  </head>
-  <body class="min-h-dvh bg-white dark:bg-neutral-950 p-6 md:p-12">
-    <div id="terminal" class="isolate text-base"></div>
-    <script>
-      const typingSpeeds = {
-        fast: 15,
-        commandMedium: 30,
-        commandSlow: 50,
-        commandFast: 25,
-        final: 35,
-      };
-
-      const commands = [
-        {
-          text: "git remote set-url origin https://milindmishra.com",
-          isCommand: true,
-          speedProfile: "mixed",
-          urlPause: 250,
-        },
-        {
-          text: "git push origin main --force",
-          isCommand: true,
-          speedProfile: "commandFast",
-        },
-        {
-          text: "Enumerating objects: done...",
-          isCommand: false,
-          speedProfile: "fast",
-        },
-        {
-          text: "Counting objects: 100%",
-          isCommand: false,
-          speedProfile: "fast",
-        },
-        {
-          text: "Delta compression: up to date",
-          isCommand: false,
-          speedProfile: "fast",
-        },
-        {
-          text: "Writing objects: 100%",
-          isCommand: false,
-          speedProfile: "fast",
-        },
-        {
-          text: "Redirecting to main repository...",
-          isCommand: false,
-          speedProfile: "final",
-        },
-      ];
-
-      const lineDelays = [600, 400, 100, 100, 100, 200];
-
-      const terminal = document.getElementById("terminal");
-
-      function createLine(text, isCommand) {
-        const line = document.createElement("div");
-        line.className = "mb-1";
-
-        if (isCommand) {
-          const prompt = document.createElement("span");
-          prompt.className = "text-neutral-500 dark:text-neutral-400";
-          prompt.textContent = "$ ";
-          line.appendChild(prompt);
-
-          const commandText = document.createElement("span");
-          commandText.className = "text-neutral-900 dark:text-neutral-50";
-          line.appendChild(commandText);
-          return { line, textElement: commandText };
-        } else {
-          const output = document.createElement("span");
-          output.className = "text-neutral-600 dark:text-neutral-400";
-          line.appendChild(output);
-          return { line, textElement: output };
-        }
-      }
-
-      function addCursor(line) {
-        const cursor = document.createElement("span");
-          cursor.className = "text-neutral-900 dark:text-neutral-50 cursor-blink";
-        cursor.textContent = "|";
-        cursor.id = "active-cursor";
-        line.appendChild(cursor);
-      }
-
-      function removeCursor() {
-        const cursor = document.getElementById("active-cursor");
-        if (cursor) {
-          cursor.remove();
-        }
-      }
-
-      function getCharSpeed(char, index, speedProfile, urlPause, charsTyped) {
-        if (speedProfile === "mixed") {
-          if (charsTyped < 25) return typingSpeeds.commandMedium;
-          if (charsTyped === 25) return urlPause;
-          return typingSpeeds.commandSlow;
-        }
-        return typingSpeeds[speedProfile];
-      }
-
-      function typeText(element, text, speedProfile, urlPause = 0) {
-        return new Promise((resolve) => {
-          let index = 0;
-          let charsTyped = 0;
-          function typeChar() {
-            if (index < text.length) {
-              element.textContent += text[index];
-              let delay = getCharSpeed(
-                text[index],
-                index,
-                speedProfile,
-                urlPause,
-                charsTyped,
-              );
-              index++;
-              charsTyped++;
-              setTimeout(typeChar, delay);
-            } else {
-              resolve();
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Redirecting...</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            html {
+                color-scheme: light dark;
             }
-          }
-          typeChar();
-        });
-      }
+            body {
+                font-family: "Roboto Mono", monospace;
+            }
+            .cursor-blink {
+                animation: blink 1s step-end infinite;
+            }
+            @keyframes blink {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0;
+                }
+            }
+        </style>
+    </head>
+    <body class="min-h-dvh bg-white dark:bg-neutral-950 p-6 md:p-12">
+        <div id="terminal" class="isolate text-base"></div>
+        <script>
+            const typingSpeeds = {
+                fast: 15,
+                commandMedium: 30,
+                commandSlow: 50,
+                commandFast: 25,
+                final: 35,
+            };
 
-      async function typeAllCommands() {
-        const commandLines = commands.filter((cmd) => cmd.isCommand);
-        const outputLines = commands.filter((cmd) => !cmd.isCommand);
+            const commands = [
+                {
+                    text: "dig +short milindmishra.com",
+                    isCommand: true,
+                    speedProfile: "commandMedium",
+                },
+                {
+                    text: "172.67.180.211",
+                    isCommand: false,
+                    speedProfile: "fast",
+                    instant: true,
+                },
+                {
+                    text: "104.21.91.223",
+                    isCommand: false,
+                    speedProfile: "fast",
+                    instant: true,
+                },
+                {
+                    text: "ping -c 4 milindmishra.com",
+                    isCommand: true,
+                    speedProfile: "commandFast",
+                },
+                {
+                    text: "PING milindmishra.com (104.21.91.223): 56 data bytes",
+                    isCommand: false,
+                    speedProfile: "fast",
+                },
+                {
+                    text: "64 bytes from 104.21.91.223: icmp_seq=0 ttl=57 time=76.7 ms",
+                    isCommand: false,
+                    speedProfile: "fast",
+                },
+                {
+                    text: "64 bytes from 104.21.91.223: icmp_seq=1 ttl=57 time=71.8 ms",
+                    isCommand: false,
+                    speedProfile: "fast",
+                },
+                {
+                    text: "64 bytes from 104.21.91.223: icmp_seq=2 ttl=57 time=89.8 ms",
+                    isCommand: false,
+                    speedProfile: "fast",
+                },
+                {
+                    text: "64 bytes from 104.21.91.223: icmp_seq=3 ttl=57 time=125.9 ms",
+                    isCommand: false,
+                    speedProfile: "fast",
+                },
+                {
+                    text: "",
+                    isCommand: false,
+                    speedProfile: "fast",
+                },
+                {
+                    text: "--- milindmishra.com ping statistics ---",
+                    isCommand: false,
+                    speedProfile: "fast",
+                },
+                {
+                    text: "4 packets transmitted, 4 received, 0.0% packet loss",
+                    isCommand: false,
+                    speedProfile: "fast",
+                },
+                {
+                    text: "rtt min/avg/max = 71.8/91.1/125.9 ms",
+                    isCommand: false,
+                    speedProfile: "fast",
+                },
+                {
+                    text: "host is alive — opening milindmishra.com...",
+                    isCommand: false,
+                    speedProfile: "final",
+                },
+            ];
 
-        for (let i = 0; i < commandLines.length; i++) {
-          const cmd = commandLines[i];
-          const { line, textElement } = createLine(cmd.text, cmd.isCommand);
-          terminal.appendChild(line);
-          addCursor(line);
+            const lineDelays = [500, 400];
+            const pingDelays = [350, 850, 850, 850, 850];
 
-          await typeText(
-            textElement,
-            cmd.text,
-            cmd.speedProfile,
-            cmd.urlPause || 0,
-          );
-          removeCursor();
+            const terminal = document.getElementById("terminal");
 
-          if (i < commandLines.length - 1) {
-            await new Promise((resolve) => setTimeout(resolve, lineDelays[i]));
-          }
-        }
+            function createLine(text, isCommand) {
+                const line = document.createElement("div");
+                line.className = "mb-1";
 
-        await new Promise((resolve) => setTimeout(resolve, 800));
+                if (isCommand) {
+                    const prompt = document.createElement("span");
+                    prompt.className = "text-neutral-500 dark:text-neutral-400";
+                    prompt.textContent = "$ ";
+                    line.appendChild(prompt);
 
-        for (const cmd of outputLines) {
-          const { line, textElement } = createLine(cmd.text, cmd.isCommand);
-          terminal.appendChild(line);
-          textElement.textContent = cmd.text;
-        }
+                    const commandText = document.createElement("span");
+                    commandText.className =
+                        "text-neutral-900 dark:text-neutral-50";
+                    line.appendChild(commandText);
+                    return { line, textElement: commandText };
+                } else {
+                    const output = document.createElement("span");
+                    output.className = "text-neutral-600 dark:text-neutral-400";
+                    line.appendChild(output);
+                    return { line, textElement: output };
+                }
+            }
 
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        window.location.href = "https://milindmishra.com";
-      }
+            function addCursor(line) {
+                const cursor = document.createElement("span");
+                cursor.className =
+                    "text-neutral-900 dark:text-neutral-50 cursor-blink";
+                cursor.textContent = "|";
+                cursor.id = "active-cursor";
+                line.appendChild(cursor);
+            }
 
-      typeAllCommands();
-    </script>
-  </body>
+            function removeCursor() {
+                const cursor = document.getElementById("active-cursor");
+                if (cursor) {
+                    cursor.remove();
+                }
+            }
+
+            function typeText(element, text, speedProfile) {
+                const delay = typingSpeeds[speedProfile];
+                return new Promise((resolve) => {
+                    let index = 0;
+                    function typeChar() {
+                        if (index < text.length) {
+                            element.textContent += text[index];
+                            index++;
+                            setTimeout(typeChar, delay);
+                        } else {
+                            resolve();
+                        }
+                    }
+                    typeChar();
+                });
+            }
+
+            async function typeAllCommands() {
+                let commandIdx = 0;
+                let pingIdx = 0;
+                let inPingOutput = false;
+
+                for (let i = 0; i < commands.length; i++) {
+                    const cmd = commands[i];
+                    const { line, textElement } = createLine(
+                        cmd.text,
+                        cmd.isCommand,
+                    );
+                    terminal.appendChild(line);
+
+                    if (cmd.isCommand) {
+                        addCursor(line);
+                        await typeText(textElement, cmd.text, cmd.speedProfile);
+                        removeCursor();
+                        await new Promise((r) =>
+                            setTimeout(r, lineDelays[commandIdx] ?? 400),
+                        );
+                        commandIdx++;
+                        inPingOutput = cmd.text.startsWith("ping");
+                        pingIdx = 0;
+                    } else {
+                        textElement.textContent = cmd.text || " ";
+                        if (cmd.instant) {
+                            continue;
+                        }
+                        if (inPingOutput) {
+                            await new Promise((r) =>
+                                setTimeout(r, pingDelays[pingIdx] ?? 120),
+                            );
+                            pingIdx++;
+                        } else {
+                            await new Promise((r) => setTimeout(r, 120));
+                        }
+                    }
+                }
+
+                await new Promise((resolve) => setTimeout(resolve, 1200));
+                window.location.href = "https://milindmishra.com";
+            }
+
+            typeAllCommands();
+        </script>
+    </body>
 </html>
